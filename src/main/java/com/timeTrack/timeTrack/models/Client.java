@@ -13,7 +13,7 @@ public class Client {
     private String email;
     private String role;  // plaintiff or defendant
 
-    @OneToMany (fetch = FetchType.EAGER, mappedBy = "client")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "client")
     private Set<Matter> matter;
 
     public Client() {

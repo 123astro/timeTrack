@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/client")
@@ -43,8 +44,11 @@ public class ClientController {
         Client client = clientRepo.findById(clientId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         for(Matter matter : matters){
             client.getMatter().add(matter);
-            matter.setClient(client);
-            matterRepo.save(matter);
+            Optional<Matter> mat = matterRepo.findById(matter.getId());
+            if(mat.isEmpty())
+                continue;
+            mat.get().setClient(client);
+            matterRepo.save(mat.get());
         }
         return new ResponseEntity<>(clientRepo.save(client), HttpStatus.CREATED);
     }
